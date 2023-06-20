@@ -1,0 +1,33 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title #{pageTitle} | #{siteName}
+    link(rel="stylesheet", href="https://unpkg.com/mvp.css@1.12/mvp.css")
+  body
+    header
+      nav
+        ul
+          li
+            a(href="/") Home &rarr;
+          if loggedIn
+            li
+              a(href="/logout") Logout &rarr;
+            li
+              a(href="/my-profile") #{loggedInUser.name}의 Profile
+          else
+            li
+              a(href="/join") Join &rarr;
+            li
+              a(href="/login") Login &rarr;
+          li
+            a(href="/search") Search &rarr;
+          li
+            a(href="/video/upload") upload video &rarr;
+      h1=pageTitle
+    main
+      block content
+  include partials/footer.pug
+    

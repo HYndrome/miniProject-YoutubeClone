@@ -1,0 +1,34 @@
+{
+  "name": "wetube",
+  "version": "1.0.0",
+  "description": "The best way to watch video",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HYndrome/wetube-reloaded.git"
+  },
+  "scripts": {
+    "dev": "nodemon --exec babel-node src/init.js"
+  },
+  "author": "HYndrome",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HYndrome/wetube-reloaded/issues"
+  },
+  "homepage": "https://github.com/HYndrome/wetube-reloaded#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "connect-mongo": "^5.0.0",
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mongoose": "^7.2.2",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.1",
+    "@babel/node": "^7.22.1",
+    "@babel/preset-env": "^7.22.4",
+    "nodemon": "^2.0.22"
+  }
+}
