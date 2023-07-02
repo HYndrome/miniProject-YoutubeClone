@@ -6,6 +6,7 @@ html(lang="en")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title #{pageTitle} | #{siteName}
     link(rel="stylesheet", href="https://unpkg.com/mvp.css@1.12/mvp.css")
+    link(rel="stylesheet", href="/static/css/styles.css")
   body
     header
       nav
@@ -14,9 +15,11 @@ html(lang="en")
             a(href="/") Home &rarr;
           if loggedIn
             li
-              a(href="/logout") Logout &rarr;
+              a(href="/video/upload") upload video &rarr;
             li
-              a(href="/my-profile") #{loggedInUser.name}의 Profile
+              a(href="/users/edit") Edit Profile
+            li
+              a(href="/users/logout") Logout &rarr;
           else
             li
               a(href="/join") Join &rarr;
@@ -24,10 +27,9 @@ html(lang="en")
               a(href="/login") Login &rarr;
           li
             a(href="/search") Search &rarr;
-          li
-            a(href="/video/upload") upload video &rarr;
       h1=pageTitle
     main
       block content
-  include partials/footer.pug
+    include partials/footer.pug
+  block scripts
     

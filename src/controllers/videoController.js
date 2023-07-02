@@ -13,6 +13,7 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
+  console.log(video.fileUrl);
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found" });
   }
@@ -48,11 +49,15 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
+  // const { path } = req.file;
+  const { path: fileUrl } = req.file;
   const { title, description, hashtags } = req.body;
   try {
     await Video.create({
       title,
       description,
+      // fileUrl: path,
+      fileUrl,
       // createdAt: Date.now(),
       hashtags: Video.formatHashtags(hashtags),
     });
@@ -76,6 +81,7 @@ export const search = async (req, res) => {
   const { keyword } = req.query;
   // video가 없을 경우을 위한 빈 배열
   let videos = [];
+  // 아래는 mongoDB의 필터문인 것 같음
   if (keyword) {
     videos = await Video.find({
       title: {
