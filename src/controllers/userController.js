@@ -217,4 +217,50 @@ export const postEdit = async (req, res) => {
   return res.redirect("edit");
 };
 
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly === true) {
+    return res.redirect("/");
+  }
+  return res.render("change-password", { pageTitle: "Change Passoword" });
+};
+
+export const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      // user: { _id, password },
+      user: { _id },
+    },
+    body: { oldPassword, newPassword, newPasswordConfirmation },
+  } = req;
+  const user = await User.findById(_id);
+  const ok = await bcrypt.compare(oldPassword, user.password);
+  if (!ok) {
+    return res.status(400).render("change-password", {
+      pageTitle: "Change Passoword",
+      errorMessage: "Password does not match!",
+    });
+  }
+  if (newPassword !== newPasswordConfirmation) {
+    return res.status(400).render("change-password", {
+      pageTitle: "Change Passoword",
+      errorMessage: "Failed Password Confirmation",
+    });
+  }
+  // const user = await User.findById(_id);
+  user.password = newPassword;
+  // userSchema.pre() 적용시키기 위해서 save
+  // session으로 현재 유저의 비밀번호를 가져오는 경우 session도 같이 update해주자
+  // 다만 logout 시킬 경우에는 상관 없긴함
+  // req.session.user.password = user.password;
+
+  // await user.save();
+  // return res.redirect("logout");
+  // cjsrkd3321's comment
+  // 위와 같은 형태로 구현하면 해커들이 로직파악 후에 302 redirect를 프록시를 통해서 막은 후
+  // 이전 세션 데이터도 활용할 수 있게 됩니다.
+  // 좀더 안전하게 하려면 아래와 같이 확실하게 destroy해주는게 좋아보여요.
+  req.session.destroy();
+  return res.redirect("/login");
+};
+
 export const see = (req, res) => res.send("See User");
