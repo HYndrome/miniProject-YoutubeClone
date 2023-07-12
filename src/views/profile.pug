@@ -1,0 +1,7 @@
+extend base
+include mixins/video
+
+
+block content
+  each video in user.videos 
+    +video(video)

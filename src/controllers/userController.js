@@ -1,4 +1,5 @@
 import User from "../models/User";
+import Video from "../models/Video";
 import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
@@ -148,6 +149,7 @@ export const finishGithubLogin = async (req, res) => {
 
 export const logout = (req, res) => {
   req.session.destroy();
+  req.flash("info", "Bye Bye");
   return res.redirect("/");
 };
 export const getEdit = (req, res) => {
@@ -219,6 +221,7 @@ export const postEdit = async (req, res) => {
 
 export const getChangePassword = (req, res) => {
   if (req.session.user.socialOnly === true) {
+    req.flash("error", "Can't change password");
     return res.redirect("/");
   }
   return res.render("change-password", { pageTitle: "Change Passoword" });
@@ -248,6 +251,7 @@ export const postChangePassword = async (req, res) => {
   }
   // const user = await User.findById(_id);
   user.password = newPassword;
+  req.flash("info", "Passowrd updated");
   // userSchema.pre() 적용시키기 위해서 save
   // session으로 현재 유저의 비밀번호를 가져오는 경우 session도 같이 update해주자
   // 다만 logout 시킬 경우에는 상관 없긴함
@@ -263,4 +267,14 @@ export const postChangePassword = async (req, res) => {
   return res.redirect("/login");
 };
 
-export const see = (req, res) => res.send("See User");
+export const see = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id).populate("videos");
+  if (!user) {
+    return res.status(404).render("404", { pageTitle: "User not found" });
+  }
+  return res.render("profile", {
+    pageTitle: `${user.name}의 Profile`,
+    user,
+  });
+};
